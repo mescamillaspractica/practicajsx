@@ -11,8 +11,11 @@ npx create-react-app practicajsx
 Una vez generado el proyecto procedemos a borrar todos los archivos de la carpeta src. Una buena practica en proyectos de react es escribir los nombres de los archivos que tienen componentes en mayúscula. Ej: ReactComponent.js, esto no solamente se hace por convención sino porque al momento de compilar el código, react toma los elementos en minúscula como etiquetas del DOM (Document Object Model) y no como elementos creados por el usuario.
 
 Creamos el archivo "index.js" dentro de la carpeta src.
+
 src
+
 └ index.js
+
 El resto de la practica sera dentro de la carpeta src.
 
 ## El ciclo de vida de los componentes
