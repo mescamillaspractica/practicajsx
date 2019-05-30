@@ -11,11 +11,8 @@ npx create-react-app practicajsx
 Una vez generado el proyecto procedemos a borrar todos los archivos de la carpeta src. Una buena practica en proyectos de react es escribir los nombres de los archivos que tienen componentes en mayúscula. Ej: ReactComponent.js, esto no solamente se hace por convención sino porque al momento de compilar el código, react toma los elementos en minúscula como etiquetas del DOM (Document Object Model) y no como elementos creados por el usuario.
 
 Creamos el archivo "index.js" dentro de la carpeta src.
-
 src
-
 └ index.js
-
 El resto de la practica sera dentro de la carpeta src.
 
 ## El ciclo de vida de los componentes
@@ -29,8 +26,6 @@ En general, podemos identificar cuatro fases en el ciclo de vida de un component
 4. **Errors.** Esta fase es opcional, ocurre cuando hay un error en los métodos de ciclo de vida de los descendientes del componente. 
 
 React provee ciertos métodos los cuales podemos sobrecargar para que el componente se comporte como nosotros queramos en estos momentos importantes, llamados "métodos del ciclo de vida".
-
-![lifecycle methods](https://cdn-images-1.medium.com/max/800/1*rubjO6t-iBoNjS_K1rOkzQ.png)
 ## Aplicación base
 La aplicación mas pequeña en React que se puede hacer consiste en el siguiente código:
 
@@ -69,13 +64,9 @@ class App extends Component{
 render(<App/>,document.getElementById('root'));
 ```
 Ahora, vamos a crear otro archivo en la carpeta src llamado "Color.js"
-
 src
-
 └ index.js
-
 └Color.js
-
 Y escribiremos el siguiente codigo:
 ```javascript
 import React, {Component} from 'react';
@@ -129,6 +120,32 @@ En el ejemplo, el "anclaje" se realiza con la siguiente linea de código dentro 
 ```javascript
 this.setNewColor = this.setNewColor.bind(this);
 ```
+<<<<<<<<< saved version
+el componente.*/
+export default Color;
+```
+En este código usamos dos métodos del ciclo de vida de los componentes: *constructor()* y *render()*. Ambos corresponden a la fase de **Mounting** del componente, es decir, la fase en donde se prepara todo lo necesario para que el componente sea integrado al DOM. 
+En *constructor()* se crea el estado inicial del componente y se "anclan" los métodos del usuario a este.
+En el ejemplo, el "anclaje" se realiza con la siguiente linea de código dentro de *constructor()*:
+```javascript
+this.setNewColor = this.setNewColor.bind(this);
+```
+=========
+
+```javascript
+this.setNewColor = this.setNewColor.bind(this);
+```
+ Esto se debe hacer debido al comportamiento "extraño" de *this* en JavaScript. Para saber mas sobre este tema pueden leer [este articulo.](https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/)
+el componente.*/
+export default Color;
+```
+En este código usamos dos métodos del ciclo de vida de los componentes: *constructor()* y *render()*. Ambos corresponden a la fase de **Mounting** del componente, es decir, la fase en donde se prepara todo lo necesario para que el componente sea integrado al DOM. 
+En *constructor()* se crea el estado inicial del componente y se "anclan" los métodos del usuario a este.
+En el ejemplo, el "anclaje" se realiza con la siguiente linea de código dentro de *constructor()*:
+```javascript
+this.setNewColor = this.setNewColor.bind(this);
+```
+
  Esto se debe hacer debido al comportamiento "extraño" de *this* en JavaScript. Para saber mas sobre este tema pueden leer [este articulo.]([https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/](https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/))
 ##  Reloj: Mounting y Unmounting
 El siguiente componente viene de la documentacion de React: Una linea de texto que muestra la hora en tiempo real.
@@ -198,8 +215,72 @@ Modificamos par de cosas del ejemplo original de React:
 * El renderizado del componente se delega a index.js, ahora solo se exporta Clock
 * Se renderizan dos relojes usando dos formas distintas. El resultado es el mismo, si bien en una se utiliza un componente auxiliar. 
 
+## Peticion HTTP basica
+
+El tercer y ultimo componente de esta practica mostrara como realizar una peticion HTTP. Primero debemos instalar axios,
+un paquete que simplifica la manera en que se realizan peticiones. Para instalar axios, nos movemos a la carpeta raiz
+del proyecto y escribimos el siguiente comando:
+
+```
+npm install axios
+```
+
+Una vez instalado el paquete, creamos un archivo llamado "Request.js" en la carpeta src:
 
 
+src
+
+└Clock.js
+
+└Color.js
+
+└index.js
+
+└Request.js
+
+Dentro del archivo pondremos el siguiente codigo:
+
+```javascript
+import React,{Component} from 'react'
+import axios from 'axios';
+
+class Request extends Component{
+    
+state = {
+   todo:null
+}
+
+
+componentDidMount(){
+  axios.get('https://jsonplaceholder.typicode.com/users/1')
+  .then(res=>{
+      this.setState({
+          todo:res.data
+      })
+  })
+  .catch(err=>console.log(err))
+}
+
+
+    render(){
+        return (
+            <div>
+            <h1>Http requests in react</h1>
+            {this.state.todo ? <p>{this.state.todo.username}</p> : <p>Loading...</p>}
+            </div>
+        )
+    }
+
+}
+
+export default Request;
+
+```
+Se puede notar brevemente que cuando se carga la pagina aparece la frase "loading..." antes de que aparezca elnombre del usuario.
+
+## Referencias
+[Componente HTTP](https://reactgo.com/http-request-react/)
+[Componente Clock](https://reactjs.org/docs/state-and-lifecycle.html)
 
 
 

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import Color from "./Color";
 import Clock from "./Clock";
+import Request from './Request';
 
 class App extends Component{
     render(){
@@ -9,6 +10,7 @@ class App extends Component{
             <React.Fragment>
                 <Color/> 
                 <Clock/>
+                <Request/>
             </React.Fragment>
         );
     }
