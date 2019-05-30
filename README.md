@@ -123,7 +123,7 @@ En el ejemplo, el "anclaje" se realiza con la siguiente linea de código dentro 
 ```javascript
 this.setNewColor = this.setNewColor.bind(this);
 ```
- Esto se debe hacer debido al comportamiento "extraño" de *this* en JavaScript. Para saber mas sobre este tema pueden leer [este articulo.]([https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/](https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/))
+ Esto se debe hacer debido al comportamiento "extraño" de *this* en JavaScript. Para saber mas sobre este tema pueden leer [este articulo.](https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/)
 
 
 
