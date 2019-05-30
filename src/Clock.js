@@ -9,14 +9,15 @@ class Clock extends Component {
     super(props);
     this.state = {date: new Date()};
   }
-
+    
+    //Este metodo se llama cuando el componente fue renderizado
   componentDidMount() {
     this.timerID = setInterval(
       () => this.tick(),
       1000
     );
   }
-
+    //Este metodo se llama cuando el componente desaparece
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
@@ -31,6 +32,12 @@ class Clock extends Component {
     return (
       <div>
         <h1>Hello, world!</h1>
+        {/*
+        Notese que las siguientes dos lineas son equivalentes.
+        La primera llama al componente funcion definido al 
+        inicio de este archivo, mientras que la segunda manipula
+        el estado directamente.
+        */}
         <h2>It is {this.state.date.toLocaleTimeString()}</h2>
         <FormattedDate date={this.state.date}/>
       </div>
