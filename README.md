@@ -1,68 +1,128 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+# Practica de React y JSX
+## Configuración del ambiente
+Se debe actualizar npm y node. Node debe estar en versión 8 o superior para correr el comando create-react-app,  el cual simplifica el proceso de montar la configuración del proyecto. Los siguientes comandos deben correrse en la terminal para realizar dicho proceso.
+```
+npm update npm -g
+nvm install 12.3.1
+nvm use 12.3.1
+npx create-react-app practicajsx
+```
+Una vez generado el proyecto procedemos a borrar todos los archivos de la carpeta src. Una buena practica en proyectos de react es escribir los nombres de los archivos que tienen componentes en mayúscula. Ej: ReactComponent.js, esto no solamente se hace por convención sino porque al momento de compilar el código, react toma los elementos en minúscula como etiquetas del DOM (Document Object Model) y no como elementos creados por el usuario.
 
-In the project directory, you can run:
+Creamos el archivo "index.js" dentro de la carpeta src.
+src
+└ index.js
+El resto de la practica sera dentro de la carpeta src.
 
-### `npm start`
+## El ciclo de vida de los componentes
+React maneja componentes, elementos encapsulados que conforman la interfaz gráfica. Surge el interés de saber cuando un componente se carga por primera vez en la pagina, su estado cambia, se actualiza de alguna manera y desaparece. A esto se le llama "ciclo de vida" 
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+En general, podemos identificar cuatro fases en el ciclo de vida de un componente:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+1. **Mounting.** Todo lo que ocurre antes de renderizar el componente en la pagina.
+2. **Updating.** Todo lo que ocurre una vez el componente ya esta renderizado en la pagina.
+3. **Unmounting.** Todo lo que ocurre cuando el componente se remueve de la pagina. 
+4. **Errors.** Esta fase es opcional, ocurre cuando hay un error en los métodos de ciclo de vida de los descendientes del componente. 
 
-### `npm test`
+React provee ciertos métodos los cuales podemos sobrecargar para que el componente se comporte como nosotros queramos en estos momentos importantes, llamados "métodos del ciclo de vida".
+## Aplicación base
+La aplicación mas pequeña en React que se puede hacer consiste en el siguiente código:
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```javascript
+import React, {Component} from 'react';
+import {render} from 'react-dom';
 
-### `npm run build`
+class App extends Component{
+    render(){
+        return(
+            <h1>Hello React!</h1>    
+        );
+    }
+}
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+render(<App/>,document.getElementById('root'));
+```
+El único método obligatorio para cualquier componente es render(). Cuando este método se llama, retorna todos los elementos JSX que forman un componente. Cabe resaltar que el método render de la ultima linea es distinto al que se encuentra dentro de la clase. Este ultimo método pertenece a react-dom, el paquete que permite renderizar los componentes. 
+## Colores aleatorios
+Como primera practica, vamos a crear un componente sencillo: un div cuyo color de fondo pueda cambiarse aleatoriamente con un botón.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Lo primero es modificar index.js para que se vea así:
+```javascript
+import React, {Component} from 'react';
+import {render} from 'react-dom';
+import Color from "./Color";
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+class App extends Component{
+    render(){
+        return(
+            <Color/>   
+        );
+    }
+}
 
-### `npm run eject`
+render(<App/>,document.getElementById('root'));
+```
+Ahora, vamos a crear otro archivo en la carpeta src llamado "Color.js"
+src
+└ index.js
+└Color.js
+Y escribiremos el siguiente codigo:
+```javascript
+import React, {Component} from 'react';
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+//este arreglo es JS normal
+const colors=["#FF0033","#43D51C","#1C73D5","#D4B487","#920238"];
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+//Esta funcion flecha tambien lo es
+const randomColor = () => {
+    return colors[Math.floor(Math.random()*colors.length)+1];
+}
+/*
+esta clase extiende Component, por lo que hace uso de JSX y React.
+Sin embargo, interactua con la funcion definida previamente 
+sin problema.
+*/
+class Color extends Component{
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    constructor(props){
+        super(props);
+        this.state={
+            color:randomColor()
+        }
+        this.setNewColor = this.setNewColor.bind(this);
+    }
+    
+    setNewColor(){
+        const newColor = randomColor();
+        this.setState({
+            color: newColor
+        })
+    }
+        
+    render(){
+        return(
+            <div style={{backgroundColor:this.state.color}}>
+                <button onClick = {this.setNewColor}>
+                    Color al azar
+                </button>
+            </div>  
+        );
+    }
+}
+/*En este archivo no renderizamos, solamente exportamos
+el componente.*/
+export default Color;
+```
+En este código usamos dos métodos del ciclo de vida de los componentes: *constructor()* y *render()*. Ambos corresponden a la fase de **Mounting** del componente, es decir, la fase en donde se prepara todo lo necesario para que el componente sea integrado al DOM. 
+En *constructor()* se crea el estado inicial del componente y se "anclan" los métodos del usuario a este.
+En el ejemplo, el "anclaje" se realiza con la siguiente linea de código dentro de *constructor()*:
+```javascript
+this.setNewColor = this.setNewColor.bind(this);
+```
+ Esto se debe hacer debido al comportamiento "extraño" de *this* en JavaScript. Para saber mas sobre este tema pueden leer [este articulo.]([https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/](https://www.smashingmagazine.com/2014/01/understanding-javascript-function-prototype-bind/))
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
